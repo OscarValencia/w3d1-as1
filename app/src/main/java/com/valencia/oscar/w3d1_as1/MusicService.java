@@ -20,7 +20,7 @@ public class MusicService extends Service {
     @Override
     public void onCreate() {
         Log.d(TAG,"onCreate");
-
+        createMediaPlayerIfNeeded();
 
     }
 
@@ -36,6 +36,22 @@ public class MusicService extends Service {
         mediaPlayer.stop();
     }
 
+    private void createMediaPlayerIfNeeded(){
+        if(null==mediaPlayer){
+            mediaPlayer = MediaPlayer.create(this, R.raw.braincandy);
+            mediaPlayer.setLooping(false);
+            mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                @Override
+                public void onCompletion(MediaPlayer mp) {
+                    Log.d(TAG,"onCompletion");
+                    stopSelf();
+                }
+            });
+            mediaPlayer.start();
+        }else{
+            mediaPlayer.reset();
+        }
+    }
 
 
 
